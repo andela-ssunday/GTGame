@@ -23,6 +23,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
          // $scope.score = 0;
         element[0].width = 1000;
         element[0].height = 580;
+        var sp = 1;
         var ctx = element[0].getContext('2d');
         var sound1 = document.getElementById("Effct");
         // 
@@ -58,9 +59,13 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
 
 
     function updateEntities(dt) {
+        var sp = (Math.ceil(player.score/1000) * 140 * dt);
+
         enemies.forEach(function(enemy) {
-            enemy.update(dt);
+
+            enemy.update(sp);
          });
+
          obstacle.update(dt);
          player.update();
          checkCollide();
