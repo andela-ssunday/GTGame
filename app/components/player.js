@@ -48,6 +48,7 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
          }
 
     }
+    
     Player.prototype.checkLives = function(){
       this.lives-=1;
     }
