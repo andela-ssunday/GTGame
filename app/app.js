@@ -9,7 +9,7 @@ app.controller("GTController",['$scope',function($scope){
    $scope.lives = [1,2,3,4];
 }]);
 
-app.directive("drawGame", ['gtResources','enemies','player',function(gtResources,enemies,player){
+app.directive("drawGame", ['gtResources','enemies','player','obstacle', function(gtResources,enemies,player,obstacle){
   return{
     restrict: 'A',
     //template: "<canvas width='400' height='500' style='border:1px;'></canvas>",
@@ -19,7 +19,7 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
     var doc = document,
         win = window,
 
-        lastTime;
+        lastTime,failed=false;
          // $scope.score = 0;
         element[0].width = 1000;
         element[0].height = 580;
@@ -36,10 +36,13 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
         // console.log($scope.score);
         //console.log($scope.score++);
         lastTime = now;
-        win.requestAnimationFrame(main);
+        if(failed===false){
+          win.requestAnimationFrame(main);
+        }else{
+          gameOver();
+        }
     };
-
-
+  
     function init() {
         reset();
         lastTime = Date.now();
@@ -55,9 +58,12 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
 
 
     function updateEntities(dt) {
+        
         enemies.forEach(function(enemy) {
             enemy.update(dt);
          });
+
+         obstacle.update(dt);
          player.update();
          checkCollide();
     }
@@ -96,7 +102,7 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
             //alert(enemy);
              enemy.render(ctx);
          });
-
+         obstacle.render(ctx);
          player.render(ctx);
     }
 
@@ -109,7 +115,7 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
     //console.log(enemies[0].y +"("+player.y+")");
     // var flag=false;
      enemies.forEach(function(enemy){
-       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=100)){
+       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90)){
            // sound1.src = "sound/car_crash.wav";
             player.sprite = 'images/blood.png';
             //sound1.play();
@@ -118,15 +124,31 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
             //player.score = (player.score<=10) ? 0 : player.score-10;
            // checkLevel();
            // flag = true
+           gameOver();
         }
       });
      }
-
+    function gameOver(){
+      failed = true;
+      player.score = 0;
+      doc.querySelector(".lives").innerHTML = "GAME OVER";
+        document.addEventListener('keyup', function(event)  {
+            if (event.keyCode === 13)  {
+                // scoreBoard.removeChild(finalScore);
+                // scoreBoard.removeChild(newLine);
+                reStart();
+        }
+      });
+    }
+    function reStart(){
+      failed = false;
+      main();
+    }
      function board(){
         // $scope.score = 5;
-        // doc.querySelector(".h_score").innerHTML = player.highScore;
+         doc.querySelector(".h_score").innerHTML = player.highScore;
         doc.querySelector(".c_score").innerHTML = player.score;
-         doc.querySelector(".lives").innerHTML = player.lives;
+         // doc.querySelector(".lives").innerHTML = player.lives;
      }
     gtResources.load([
         'images/char-boy.png',
@@ -148,6 +170,7 @@ app.directive("drawGame", ['gtResources','enemies','player',function(gtResources
         'images/boy-right.png',
         'images/blood.png',
         'images/Star.png',
+        'images/stone-small.png',
     ]);
     gtResources.onReady(init);
 
