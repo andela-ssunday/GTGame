@@ -68,8 +68,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
          checkCollide();
     }
 
-
-    function render() {
+      function render() {
 
         var rowImages = [
                 'images/Road.PNG',   // Row 1 of 2 of grass
