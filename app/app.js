@@ -23,6 +23,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
          // $scope.score = 0;
         element[0].width = 1000;
         element[0].height = 580;
+        var sp = 1;
         var ctx = element[0].getContext('2d');
         var sound1 = document.getElementById("Effct");
         // 
@@ -58,9 +59,11 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
 
 
     function updateEntities(dt) {
-        
+        var sp = (Math.ceil(player.score/2000) + 140 * dt);
+
         enemies.forEach(function(enemy) {
-            enemy.update(dt);
+
+            enemy.update(sp);
          });
 
          obstacle.update(dt);
@@ -114,7 +117,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
     //console.log(enemies[0].y +"("+player.y+")");
     // var flag=false;
      enemies.forEach(function(enemy){
-       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90)){
+       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
            // sound1.src = "sound/car_crash.wav";
             player.sprite = 'images/blood.png';
             //sound1.play();
@@ -141,6 +144,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
     }
     function reStart(){
       failed = false;
+      doc.querySelector(".lives").innerHTML = "";
       main();
     }
      function board(){

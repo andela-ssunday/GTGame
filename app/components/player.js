@@ -39,10 +39,7 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
           this.checkHighScore();
           //checkLives();
          if(this.y<=0){
-            // this.score+=10;
-            //this.highScore+=10;
-            // checkHighScore();
-            //this.score++;
+
             this.reset();
             // checkLevel();
          }
@@ -99,7 +96,7 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
         this.pos = pos;
       }
     Player.prototype.reset = function(){
-        this.x = 420;
+        this.x = 513;
         this.y = 435;
         this.sprite = 'images/boy-up.png';
         this.lives-=1;

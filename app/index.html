@@ -11,20 +11,21 @@
     <script type="text/javascript" src="js/materialize.min.js"></script>
 
 
-  <!--<nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo center">Gidi Run</a>
-    </div>
-  </nav>-->
+  
+
+  
   <div class="container">
+    <nav>
+      <div class="nav-wrapper blue-grey darken-4">
+        <div class="center">
+          Score:<span class="c_score"></span>
+          High Score:<span class="h_score"></span>
+          <span class="lives red"></span>
+        </div>
+    </nav>    
+    
     <div ng-controller="GTController">
-      <div class="row">
-        Score:<span class="c_score"></span>
-        High Score:<span class="h_score"></span>
-        <!--lives:<span ng="l in lives"><img src="images/life.png"/></span>-->
-        <lives:<span class="lives"></span>
-      </div>
-      <canvas draw-game></canvas>
+      <canvas draw-game style="margin-left:-10%"></canvas>
       <audio id="Effct" style="display: none;"></audio>
     </div>
   </div>
