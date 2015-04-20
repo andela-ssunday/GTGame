@@ -3,7 +3,7 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
    var Player = function(){
         this.score = 0;
         this.highScore = 0;
-        this.lives = 5;
+        this.lives = 0;
         this.counter = 0;
         this.pos = 'up';
         this.sprites = {
@@ -102,7 +102,9 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
         this.lives-=1;
     }
 
-
+    Player.prototype.init = function(){
+      Player.apply(this);
+    }
     var player = new Player();
 
     document.addEventListener('keydown', function(e) {

@@ -60,9 +60,10 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
 
     function updateEntities(dt) {
         var sp = (Math.ceil(player.score/2000) + 140 * dt);
-
+        player.level = Math.ceil(player.score/2000);
+        console.log(player.level);
         enemies.forEach(function(enemy) {
-
+            console.log(sp);
             enemy.update(sp);
          });
 
@@ -132,7 +133,6 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
      }
     function gameOver(){
       failed = true;
-      player.score = 0;
       doc.querySelector(".lives").innerHTML = "GAME OVER";
         document.addEventListener('keyup', function(event)  {
             if (event.keyCode === 13)  {
@@ -144,6 +144,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
     }
     function reStart(){
       failed = false;
+      player.init();
       doc.querySelector(".lives").innerHTML = "";
       main();
     }
@@ -151,7 +152,7 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
         // $scope.score = 5;
          doc.querySelector(".h_score").innerHTML = player.highScore;
         doc.querySelector(".c_score").innerHTML = player.score;
-         // doc.querySelector(".lives").innerHTML = player.lives;
+        doc.querySelector(".life").innerHTML = player.level;
      }
     gtResources.load([
         'images/char-boy.png',
