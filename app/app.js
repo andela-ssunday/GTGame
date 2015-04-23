@@ -72,28 +72,8 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
     }
 
       function render() {
-
-        var rowImages = [
-                'images/Road.PNG',   // Row 1 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
-            row, col;
-
-
-        // for (row = 0; row < numRows; row++) {
-            // for (col = 0; col < numCols; col++) {
-
-                ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
-            // }
-        // }
-
-
+        var rowImages = ['assets/images/Road.PNG'];
+        ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
         renderEntities();
     }
 
@@ -118,14 +98,8 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
     // var flag=false;
      enemies.forEach(function(enemy){
        if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
-           // sound1.src = "sound/car_crash.wav";
-            player.sprite = 'images/blood.png';
-            //sound1.play();
+            player.sprite = 'assets/images/blood.png';
             setTimeout(function(){player.reset();},500);
-            //player.reset();
-            //player.score = (player.score<=10) ? 0 : player.score-10;
-           // checkLevel();
-           // flag = true
            gameOver();
         }
       });
@@ -154,26 +128,26 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
          // doc.querySelector(".lives").innerHTML = player.lives;
      }
     gtResources.load([
-        'images/char-boy.png',
-        'images/Rock.png',
-        'images/sky.png',
-        'images/Road.PNG',
-        'images/car2.png',
-        'images/car5.png',
-        'images/car6.png',
-        'images/car7.png',
-        'images/boy-up1.png',
-        'images/boy-up2.png',
-        'images/boy-up3.png',
-        'images/boy-up.png',
-        'images/boy-down.png',
-        'images/boy-down1.png',
-        'images/boy-down2.png',
-        'images/boy-left.png',
-        'images/boy-right.png',
-        'images/blood.png',
-        'images/Star.png',
-        'images/stone-small.png',
+        'assets/images/char-boy.png',
+        'assets/images/Rock.png',
+        'assets/images/sky.png',
+        'assets/images/Road.PNG',
+        'assets/images/car2.png',
+        'assets/images/car5.png',
+        'assets/images/car6.png',
+        'assets/images/car7.png',
+        'assets/images/boy-up1.png',
+        'assets/images/boy-up2.png',
+        'assets/images/boy-up3.png',
+        'assets/images/boy-up.png',
+        'assets/images/boy-down.png',
+        'assets/images/boy-down1.png',
+        'assets/images/boy-down2.png',
+        'assets/images/boy-left.png',
+        'assets/images/boy-right.png',
+        'assets/images/blood.png',
+        'assets/images/Star.png',
+        'assets/images/stone-small.png',
     ]);
     gtResources.onReady(init);
 
