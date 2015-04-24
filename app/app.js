@@ -3,16 +3,12 @@
 var app = angular.module("gtGame",[]);
 
 app.controller("GTController",['$scope',function($scope){
-   // $scope.score = 0;
-  
-   // $scope.score++;
-   $scope.lives = [1,2,3,4];
+   // $scope.lives = [1,2,3,4];
 }]);
 
-app.directive("drawGame", ['gtResources','enemies','player','obstacle', function(gtResources,enemies,player,obstacle){
+app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(gtResources,Enemy,player,obstacle){
   return{
     restrict: 'A',
-    //template: "<canvas width='400' height='500' style='border:1px;'></canvas>",
     controller: 'GTController',
     link: function($scope,element){
        
@@ -20,22 +16,26 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
         win = window,
 
         lastTime,failed=false;
-         // $scope.score = 0;
         element[0].width = 1000;
         element[0].height = 580;
         var sp = 1;
         var ctx = element[0].getContext('2d');
         var sound1 = document.getElementById("Effct");
-        // 
+
+    var allEnemies = [];
+    var noOfEnemies = 5;
+    // var enemySpeed = 1;
+    for(var i=0; i<noOfEnemies; i++){ 
+        // enemy.y = enemy.ys[i];
+        Enemy.init();
+        allEnemies.push(Enemy);
+    }
     function main() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
         sound1.play();
         update(dt);
         render();
-        // $scope.score = new Date();
-        // console.log($scope.score);
-        //console.log($scope.score++);
         lastTime = now;
         if(failed===false){
           win.requestAnimationFrame(main);
@@ -50,28 +50,23 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
         main();
     }
 
-
     function update(dt) {
         board();
         updateEntities(dt);
-        // checkCollisions();
     }
 
-
     function updateEntities(dt) {
-        var sp = (Math.ceil(player.score/2000) + 140 * dt);
-
-        enemies.forEach(function(enemy) {
-
-            enemy.update(sp);
+        // var sp = (Math.ceil(player.score/2000) + 140 * dt);
+        var speed = dt + (Math.ceil(player.score/2000));
+        allEnemies.forEach(function(enemy) {
+            enemy.update(speed);
          });
-
          obstacle.update(dt);
          player.update();
          checkCollide();
     }
 
-      function render() {
+    function render() {
         var rowImages = ['assets/images/Road.PNG'];
         ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
         renderEntities();
@@ -80,9 +75,8 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
 
     function renderEntities() {
 
-         enemies.forEach(function(enemy) {
-            //alert(enemy);
-             enemy.render(ctx);
+         allEnemies.forEach(function(enemy) {   
+            enemy.render(ctx);
          });
          obstacle.render(ctx);
          player.render(ctx);
@@ -90,13 +84,11 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
 
 
     function reset() {
-        // noop
+
     }
 
     var checkCollide = function(){
-    //console.log(enemies[0].y +"("+player.y+")");
-    // var flag=false;
-     enemies.forEach(function(enemy){
+     allEnemies.forEach(function(enemy){
        if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
             player.sprite = 'assets/images/blood.png';
             setTimeout(function(){player.reset();},500);
@@ -104,14 +96,13 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
         }
       });
      }
+
     function gameOver(){
       failed = true;
       player.score = 0;
       doc.querySelector(".lives").innerHTML = "GAME OVER";
         document.addEventListener('keyup', function(event)  {
             if (event.keyCode === 13)  {
-                // scoreBoard.removeChild(finalScore);
-                // scoreBoard.removeChild(newLine);
                 reStart();
         }
       });
@@ -122,10 +113,8 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
       main();
     }
      function board(){
-        // $scope.score = 5;
-         doc.querySelector(".h_score").innerHTML = player.highScore;
+        doc.querySelector(".h_score").innerHTML = player.highScore;
         doc.querySelector(".c_score").innerHTML = player.score;
-         // doc.querySelector(".lives").innerHTML = player.lives;
      }
     gtResources.load([
         'assets/images/char-boy.png',
@@ -146,7 +135,6 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
         'assets/images/boy-left.png',
         'assets/images/boy-right.png',
         'assets/images/blood.png',
-        'assets/images/Star.png',
         'assets/images/stone-small.png',
     ]);
     gtResources.onReady(init);
