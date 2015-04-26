@@ -4,6 +4,12 @@ var app = angular.module("gtGame",[]);
 
 app.controller("GTController",['$scope',function($scope){
    // $scope.lives = [1,2,3,4];
+  // $scope.score = 0;
+   // $scope.getScore = function(){
+   //  return $scope.score;
+   // }
+   // $scope.score = 5;
+
 }]);
 
 app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(gtResources,Enemy,player,obstacle){
@@ -11,7 +17,6 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     restrict: 'A',
     controller: 'GTController',
     link: function($scope,element){
-       
     var doc = document,
         win = window,
 
@@ -23,6 +28,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         var ctx = element[0].getContext('2d');
         var sound1 = document.getElementById("Effct");
         var rowImages = ['assets/images/Road.PNG'];
+
     var allEnemies = [];
     var noOfEnemies = 5;
 
@@ -56,12 +62,13 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
       });
     }
     function restart(){
-      allEnemies.forEach(function(enemy){
+      angular.forEach(allEnemies, function(enemy){
          enemy.init();
        });
       player.reset();
       main();
     }
+
     function init() {
         failed = false;
         reset();
@@ -73,14 +80,14 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     }
 
     function update(dt) {
-        board();
+        $scope.board();
         updateEntities(dt);
     }
 
     function updateEntities(dt) {
         var speed = dt + (Math.ceil(player.score/1000));
 
-        allEnemies.forEach(function(enemy) {
+        angular.forEach(allEnemies,function(enemy) {
             enemy.update(speed);
          });
          obstacle.update(dt);
@@ -96,7 +103,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
 
 
     function renderEntities() {
-         allEnemies.forEach(function(enemy) {   
+         angular.forEach(allEnemies,function(enemy) {   
             enemy.render(ctx);
          });
          obstacle.render(ctx);
@@ -109,7 +116,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     }
 
     var checkCollide = function(){
-     allEnemies.forEach(function(enemy){
+     angular.forEach(allEnemies,function(enemy){
        if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90  && (touched === false)) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
             touched = true;
             player.sprite = 'assets/images/blood.png';
@@ -119,12 +126,13 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
       });
      touched = false;
      }
-
-     function board(){
-        doc.querySelector(".h_score").innerHTML = player.highScore;
-        doc.querySelector(".c_score").innerHTML = player.score;
-        doc.querySelector(".level").innerHTML = player.level;
+     $scope.board = function(){
+        $scope.score = player.score;
+        $scope.highScore = player.highScore;
+        $scope.level = player.level;
+        $scope.$apply();
      }
+     console.log($scope.score);
     gtResources.load([
         'assets/images/char-boy.png',
         'assets/images/Rock.png',

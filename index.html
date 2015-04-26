@@ -7,17 +7,17 @@
   <body ng-app="gtGame">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="assets/js/materialize.min.js"></script>
-    <div class="container">
+    <div class="container" ng-controller="GTController">
       <nav>
         <div class="nav-wrapper blue-grey darken-4">
           <div class="center">
-            Score:<span class="c_score"></span>
-            High Score:<span class="h_score"></span>
-            Level:<span class="level"></span>
+            Score:<span class="c_score">{{score}}</span>
+            High Score:<span class="h_score">{{highScore}}</span>
+            Level:<span class="level">{{level}}</span>
             <span class="lives red"></span>
           </div>
       </nav>    
-      <div ng-controller="GTController">
+      <div>
         <canvas draw-game style="margin-left:-10%"></canvas>
         <audio id="Effct" style="display: none;"></audio>
       </div>

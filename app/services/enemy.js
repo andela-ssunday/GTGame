@@ -6,7 +6,7 @@ app.service('Enemy',  ['gtResources',function(gtResources){
       this.sprite = this.sprites[Math.floor((Math.random()*4) + 0)];
       this.xs = [410,580];
       this.x = this.xs[Math.floor((Math.random()*2) + 0)];
-      this.y = 0;
+      this.y = -50;
   }
   this.update = function(speed) {
     if(this.y >= 600){
