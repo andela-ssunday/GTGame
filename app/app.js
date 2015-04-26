@@ -3,13 +3,7 @@
 var app = angular.module("gtGame",[]);
 
 app.controller("GTController",['$scope',function($scope){
-   // $scope.lives = [1,2,3,4];
-  // $scope.score = 0;
-   // $scope.getScore = function(){
-   //  return $scope.score;
-   // }
-   // $scope.score = 5;
-
+   
 }]);
 
 app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(gtResources,Enemy,player,obstacle){
@@ -26,7 +20,8 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         var i = 0;
         var touched = false;
         var ctx = element[0].getContext('2d');
-        var sound1 = document.getElementById("Effct");
+        var sound1 = doc.getElementById("Effct");
+        
         var rowImages = ['assets/images/Road.PNG'];
 
     var allEnemies = [];
@@ -42,7 +37,6 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     function main() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
-        sound1.play();
         update(dt);
         render();
         lastTime = now;
@@ -51,6 +45,8 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         }
     };
     function gameOver(){
+      $scope.notif = "GAME OVER! (Press Enter Key)";
+      $scope.$apply();
       win.addEventListener('keydown',function(e){
           if(e.keyCode === 13){
             if(failed===true){
@@ -62,14 +58,17 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
       });
     }
     function restart(){
+      $scope.notif = "";
       angular.forEach(allEnemies, function(enemy){
          enemy.init();
        });
       player.reset();
+      sound1.src = "assets/sound/car_sound.wav";
       main();
     }
 
     function init() {
+        sound1.src = "assets/sound/car_sound.wav";
         failed = false;
         reset();
         lastTime = Date.now();
@@ -90,7 +89,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         angular.forEach(allEnemies,function(enemy) {
             enemy.update(speed);
          });
-         obstacle.update(dt);
+         // obstacle.update(dt);
          player.update();
          checkCollide();
          
@@ -106,7 +105,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
          angular.forEach(allEnemies,function(enemy) {   
             enemy.render(ctx);
          });
-         obstacle.render(ctx);
+         // obstacle.render(ctx);
          player.render(ctx);
     }
 
@@ -117,7 +116,9 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
 
     var checkCollide = function(){
      angular.forEach(allEnemies,function(enemy){
-       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90  && (touched === false)) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
+       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90  && (touched === false)) ){
+            sound1.src = "assets/sound/car_crash.wav";
+            sound1.play();
             touched = true;
             player.sprite = 'assets/images/blood.png';
             failed = true;

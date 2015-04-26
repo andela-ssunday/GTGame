@@ -57,12 +57,12 @@ app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
     this.handleInput = function(key){
         switch(key){
             case 'left':
-            this.getSprite('left');
-              this.x = (this.x-60>368) ? this.x-93 : this.x;
+            // this.getSprite('left');
+              this.x = (this.x-60>368) ? this.x-173 : this.x;
                 break;
             case 'right':
-                this.getSprite('right');
-                this.x = (this.x+60<584) ? this.x+93 : this.x;
+                // this.getSprite('right');
+                this.x = (this.x+60<584) ? this.x+173 : this.x;
                 break;
             case 'up':
                  this.getSprite('up');
@@ -90,7 +90,7 @@ app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
         this.pos = pos;
       }
     this.reset = function(){
-        this.x = 513;
+        this.x = 420;
         this.y = 435;
         this.sprite = 'assets/images/boy-up.png';
         this.lives-=1;
