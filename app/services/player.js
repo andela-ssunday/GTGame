@@ -1,6 +1,6 @@
-app.service('player', ['gtResources','enemies', function(gtResources,enemies){
+app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
 
-   var Player = function(){
+   this.init = function(){
         this.score = 0;
         this.highScore = 0;
         this.lives = 5;
@@ -32,28 +32,29 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
         this.level = 1;    
     }
 
-    Player.prototype.update = function(){
+    this.update = function(){
           this.score+=1;
+          this.level = Math.ceil(this.score/1000);
           this.checkHighScore();
          if(this.y<=0){
             this.reset();
          }
     }
     
-    Player.prototype.checkLives = function(){
+    this.checkLives = function(){
       this.lives-=1;
     }
-    Player.prototype.checkHighScore = function(){
+    this.checkHighScore = function(){
          if(this.score>this.highScore){
              this.highScore = this.score;
          }
     }
 
-    Player.prototype.render = function(ctx){
+    this.render = function(ctx){
         ctx.drawImage(gtResources.get(this.sprite), this.x, this.y);
     }
 
-    Player.prototype.handleInput = function(key){
+    this.handleInput = function(key){
         switch(key){
             case 'left':
             this.getSprite('left');
@@ -74,7 +75,7 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
         }
 
     }
-    Player.prototype.getSprite = function(pos){
+    this.getSprite = function(pos){
         if(this.pos!==pos){
           this.counter = 0;
         }else{
@@ -88,24 +89,24 @@ app.service('player', ['gtResources','enemies', function(gtResources,enemies){
         }
         this.pos = pos;
       }
-    Player.prototype.reset = function(){
+    this.reset = function(){
         this.x = 513;
         this.y = 435;
         this.sprite = 'assets/images/boy-up.png';
         this.lives-=1;
+        this.score = 0;
     }
-    var player = new Player();
+    var self = this;
+      document.addEventListener('keydown', function(e) {
+          var allowedKeys = {
+              37: 'left',
+              38: 'up',
+              39: 'right',
+              40: 'down'
+          };
 
-    document.addEventListener('keydown', function(e) {
-        var allowedKeys = {
-            37: 'left',
-            38: 'up',
-            39: 'right',
-            40: 'down'
-        };
+          self.handleInput(allowedKeys[e.keyCode]);
+      });
+    
 
-        player.handleInput(allowedKeys[e.keyCode]);
-    });
-
-    return player;
 }]);

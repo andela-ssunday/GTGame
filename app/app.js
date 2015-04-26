@@ -18,18 +18,21 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         lastTime,failed=false;
         element[0].width = 1000;
         element[0].height = 580;
-        var sp = 1;
+        var i = 0;
+        var touched = false;
         var ctx = element[0].getContext('2d');
         var sound1 = document.getElementById("Effct");
-
+        var rowImages = ['assets/images/Road.PNG'];
     var allEnemies = [];
     var noOfEnemies = 5;
-    // var enemySpeed = 1;
-    for(var i=0; i<noOfEnemies; i++){ 
-        // enemy.y = enemy.ys[i];
-        Enemy.init();
-        allEnemies.push(Enemy);
+
+    function enemy_init(){
+      for(var i=0; i<noOfEnemies; i++){ 
+          Enemy.init();
+          allEnemies.push(Enemy);
+      }      
     }
+
     function main() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
@@ -39,14 +42,33 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         lastTime = now;
         if(failed===false){
           win.requestAnimationFrame(main);
-        }else{
-          gameOver();
         }
     };
-  
+    function gameOver(){
+      win.addEventListener('keydown',function(e){
+          if(e.keyCode === 13){
+            if(failed===true){
+                // win.cancelAnimationFrame(a);
+                failed = false;
+                restart();
+            }
+          }
+      });
+    }
+    function restart(){
+      allEnemies.forEach(function(enemy){
+         enemy.init();
+       });
+      player.reset();
+      main();
+    }
     function init() {
+        failed = false;
         reset();
         lastTime = Date.now();
+        player.init();
+        enemy_init();
+        obstacle.init();
         main();
     }
 
@@ -56,25 +78,24 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     }
 
     function updateEntities(dt) {
-        // var sp = (Math.ceil(player.score/2000) + 140 * dt);
-        var speed = dt + (Math.ceil(player.score/2000));
+        var speed = dt + (Math.ceil(player.score/1000));
+
         allEnemies.forEach(function(enemy) {
             enemy.update(speed);
          });
          obstacle.update(dt);
          player.update();
          checkCollide();
+         
     }
 
     function render() {
-        var rowImages = ['assets/images/Road.PNG'];
         ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
         renderEntities();
     }
 
 
     function renderEntities() {
-
          allEnemies.forEach(function(enemy) {   
             enemy.render(ctx);
          });
@@ -84,37 +105,25 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
 
 
     function reset() {
-
+      failed = false;
     }
 
     var checkCollide = function(){
      allEnemies.forEach(function(enemy){
-       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
+       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90  && (touched === false)) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
+            touched = true;
             player.sprite = 'assets/images/blood.png';
-            setTimeout(function(){player.reset();},500);
-           gameOver();
+            failed = true;
+            gameOver();
         }
       });
+     touched = false;
      }
 
-    function gameOver(){
-      failed = true;
-      player.score = 0;
-      doc.querySelector(".lives").innerHTML = "GAME OVER";
-        document.addEventListener('keyup', function(event)  {
-            if (event.keyCode === 13)  {
-                reStart();
-        }
-      });
-    }
-    function reStart(){
-      failed = false;
-      doc.querySelector(".lives").innerHTML = "";
-      main();
-    }
      function board(){
         doc.querySelector(".h_score").innerHTML = player.highScore;
         doc.querySelector(".c_score").innerHTML = player.score;
+        doc.querySelector(".level").innerHTML = player.level;
      }
     gtResources.load([
         'assets/images/char-boy.png',
@@ -140,7 +149,6 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     gtResources.onReady(init);
 
     $scope.ctx = ctx;
-     
     }
   }
 }]);
