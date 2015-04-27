@@ -1,0 +1,12 @@
+
+<div layout>
+    <div flex="20" layout layout-align="center center">
+      <span class="md-body-1">{{name}}</span>
+    </div> 
+    <md-slider flex="60" min="0" max="{{max}}" ng-model="model"
+       aria-label="{{sliderlabel}}" id="{{id}}" ng-class="myclass"  style="margin-left: 10px">
+    </md-slider>
+    <div flex="15" layout layout-align="center center" style="margin-left: 10px">
+      <input type="number" ng-model="model" aria-label="{{arialabel}}" aria-controls="{{ariacontrols}}" style="text-align: center">
+    </div>
+</div>

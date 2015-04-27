@@ -27,7 +27,7 @@ app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
           ]
         }
         this.sprite = 'assets/images/boy-up.png';
-        this.x = 420;
+        this.x = 170;
         this.y = 435;
         this.level = 1;    
     }
@@ -58,11 +58,11 @@ app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
         switch(key){
             case 'left':
             // this.getSprite('left');
-              this.x = (this.x-60>368) ? this.x-173 : this.x;
+              this.x = (this.x-20>170) ? this.x-156 : this.x;
                 break;
             case 'right':
                 // this.getSprite('right');
-                this.x = (this.x+60<584) ? this.x+173 : this.x;
+                this.x = (this.x+20<300) ? this.x+156 : this.x;
                 break;
             case 'up':
                  this.getSprite('up');
@@ -90,7 +90,7 @@ app.service('player', ['gtResources','Enemy', function(gtResources,Enemy){
         this.pos = pos;
       }
     this.reset = function(){
-        this.x = 420;
+        this.x = 170;
         this.y = 435;
         this.sprite = 'assets/images/boy-up.png';
         this.lives-=1;

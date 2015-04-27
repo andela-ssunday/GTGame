@@ -1,6 +1,7 @@
 'use strict';
 
-var app = angular.module("gtGame",[]);
+var app = angular.module("gtGame",["paletteMakerApp"]);
+var paletteMakerApp = angular.module('paletteMakerApp', ['ngMaterial', 'ngRoute']);
 
 app.controller("GTController",['$scope',function($scope){
    
@@ -15,8 +16,8 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         win = window,
 
         lastTime,failed=false;
-        element[0].width = 1000;
-        element[0].height = 580;
+        element[0].width = 504;
+        element[0].height = 500;
         var i = 0;
         var touched = false;
         var ctx = element[0].getContext('2d');
@@ -96,7 +97,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     }
 
     function render() {
-        ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
+        ctx.drawImage(gtResources.get(rowImages[0]),  0,  0);
         renderEntities();
     }
 
@@ -133,7 +134,7 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
         $scope.level = player.level;
         $scope.$apply();
      }
-     console.log($scope.score);
+     // console.log($scope.score);
     gtResources.load([
         'assets/images/char-boy.png',
         'assets/images/Rock.png',

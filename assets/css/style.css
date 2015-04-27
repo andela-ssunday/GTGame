@@ -1,0 +1,27 @@
+body {
+/*  /*background: "url('../img/image.jpg');"*/
+  background-color: white;
+  background-size: cover;*/
+}
+#home {
+  /*background: url('../img/image.jpg');*/
+  background: black;
+  background-size: cover;
+/*  height: 268px;*/
+  color: rgb(5, 227, 255);
+  text-align: center;
+}
+#home a {
+  color: rgb(67, 255, 36);
+  font-size: 40px;
+  font-weight: bolder;
+  text-decoration: none;
+}
+#home h3, h4 {
+  color:  white;
+}
+@media screen and (max-width: 300px) {
+  #clordd {
+    margin-left: 40px;
+  }
+}
