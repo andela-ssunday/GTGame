@@ -4,7 +4,7 @@ var app = angular.module("gtGame",["paletteMakerApp"]);
 var paletteMakerApp = angular.module('paletteMakerApp', ['ngMaterial', 'ngRoute']);
 
 app.controller("GTController",['$scope',function($scope){
-  $scope.test = 2;
+   
 }]);
 
 app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(gtResources,Enemy,player,obstacle){
@@ -85,19 +85,10 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
     }
 
     function updateEntities(dt) {
-<<<<<<< HEAD
-        var sp = (Math.ceil(player.score/2000) + 140 * dt);
-        player.level = Math.ceil(player.score/2000);
-        console.log(player.level);
-        enemies.forEach(function(enemy) {
-            console.log(sp);
-            enemy.update(sp);
-=======
         var speed = dt + (Math.ceil(player.score/1000));
 
         angular.forEach(allEnemies,function(enemy) {
             enemy.update(speed);
->>>>>>> master
          });
          // obstacle.update(dt);
          player.update();
@@ -137,36 +128,11 @@ app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(g
       });
      touched = false;
      }
-<<<<<<< HEAD
-    function gameOver(){
-      failed = true;
-      doc.querySelector(".lives").innerHTML = "GAME OVER";
-        document.addEventListener('keyup', function(event)  {
-            if (event.keyCode === 13)  {
-                // scoreBoard.removeChild(finalScore);
-                // scoreBoard.removeChild(newLine);
-                reStart();
-        }
-      });
-    }
-    function reStart(){
-      failed = false;
-      player.init();
-      doc.querySelector(".lives").innerHTML = "";
-      main();
-    }
-     function board(){
-        // $scope.score = 5;
-         doc.querySelector(".h_score").innerHTML = player.highScore;
-        doc.querySelector(".c_score").innerHTML = player.score;
-        doc.querySelector(".life").innerHTML = player.level;
-=======
      $scope.board = function(){
         $scope.score = player.score;
         $scope.highScore = player.highScore;
         $scope.level = player.level;
         $scope.$apply();
->>>>>>> master
      }
      // console.log($scope.score);
     gtResources.load([

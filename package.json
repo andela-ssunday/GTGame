@@ -1,8 +1,15 @@
 {
+<<<<<<< HEAD
   "name": "Gidi Traffic Game",
   "private": true,
   "version": "0.0.0",
   "description": "A simple Game for when youre bored",
+=======
+  "name": "Gidi Traffick Game",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A simple game for when youre bored",
+>>>>>>> master
   "repository": "https://github.com/andela-ssunday/GTGame",
   "license": "MIT",
   "devDependencies": {
