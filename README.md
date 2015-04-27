@@ -13,4 +13,4 @@ How to Play
 
 Link To Play Game
 =================
-<a href="andela-ssunday.github.io/GTGame">Link to Game</a>
+<a href="http://andela-ssunday.github.io/GTGame">Link to Game</a>
