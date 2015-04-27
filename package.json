@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "Gidi Traffick Game",
   "private": true,
   "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "description": "A simple game for when youre bored",
+  "repository": "https://github.com/andela-ssunday/GTGame",
   "license": "MIT",
   "devDependencies": {
     "karma": "~0.10",
