@@ -9,9 +9,6 @@ describe("GTGame",function(){
 	}));
 
 	it("should run fine", function(){
-
 		expect(scope.test).toBeDefined();
-
 	});
-
 });
