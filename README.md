@@ -9,3 +9,8 @@ How to Play
  	-The longer you keep yourself un-hit by a vehicle, The higher your scores 
  	and well, the longer you live. 
  	-Have fun
+
+
+Link To Play Game
+=================
+<a href="andela-ssunday.github.io/GTGame">Link to Game</a>
