@@ -1,136 +1,143 @@
 'use strict';
 
-var app = angular.module("gtGame",[]);
+var app = angular.module("gtGame",["paletteMakerApp"]);
+var paletteMakerApp = angular.module('paletteMakerApp', ['ngMaterial', 'ngRoute']);
 
 app.controller("GTController",['$scope',function($scope){
-   // $scope.score = 0;
-  
-   // $scope.score++;
-   $scope.lives = [1,2,3,4];
+  $scope.test = 2;
 }]);
 
-app.directive("drawGame", ['gtResources','enemies','player','obstacle', function(gtResources,enemies,player,obstacle){
+app.directive("drawGame", ['gtResources','Enemy','player','obstacle', function(gtResources,Enemy,player,obstacle){
   return{
     restrict: 'A',
-    //template: "<canvas width='400' height='500' style='border:1px;'></canvas>",
     controller: 'GTController',
     link: function($scope,element){
-       
     var doc = document,
         win = window,
 
         lastTime,failed=false;
-         // $scope.score = 0;
-        element[0].width = 1000;
-        element[0].height = 580;
-        var sp = 1;
+        element[0].width = 504;
+        element[0].height = 500;
+        var i = 0;
+        var touched = false;
         var ctx = element[0].getContext('2d');
-        var sound1 = document.getElementById("Effct");
-        // 
+        var sound1 = doc.getElementById("Effct");
+        
+        var rowImages = ['assets/images/Road.PNG'];
+
+    var allEnemies = [];
+    var noOfEnemies = 5;
+
+    function enemy_init(){
+      for(var i=0; i<noOfEnemies; i++){ 
+          Enemy.init();
+          allEnemies.push(Enemy);
+      }      
+    }
+
     function main() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
-        sound1.play();
         update(dt);
         render();
-        // $scope.score = new Date();
-        // console.log($scope.score);
-        //console.log($scope.score++);
         lastTime = now;
         if(failed===false){
           win.requestAnimationFrame(main);
-        }else{
-          gameOver();
         }
     };
-  
+    function gameOver(){
+      $scope.notif = "GAME OVER! (Press Enter Key)";
+      $scope.$apply();
+      win.addEventListener('keydown',function(e){
+          if(e.keyCode === 13){
+            if(failed===true){
+                // win.cancelAnimationFrame(a);
+                failed = false;
+                restart();
+            }
+          }
+      });
+    }
+    function restart(){
+      $scope.notif = "";
+      angular.forEach(allEnemies, function(enemy){
+         enemy.init();
+       });
+      player.reset();
+      sound1.src = "assets/sound/car_sound.wav";
+      main();
+    }
+
     function init() {
+        sound1.src = "assets/sound/car_sound.wav";
+        failed = false;
         reset();
         lastTime = Date.now();
+        player.init();
+        enemy_init();
+        obstacle.init();
         main();
     }
 
-
     function update(dt) {
-        board();
+        $scope.board();
         updateEntities(dt);
-        // checkCollisions();
     }
 
-
     function updateEntities(dt) {
+<<<<<<< HEAD
         var sp = (Math.ceil(player.score/2000) + 140 * dt);
         player.level = Math.ceil(player.score/2000);
         console.log(player.level);
         enemies.forEach(function(enemy) {
             console.log(sp);
             enemy.update(sp);
-         });
+=======
+        var speed = dt + (Math.ceil(player.score/1000));
 
-         obstacle.update(dt);
+        angular.forEach(allEnemies,function(enemy) {
+            enemy.update(speed);
+>>>>>>> master
+         });
+         // obstacle.update(dt);
          player.update();
          checkCollide();
+         
     }
 
-      function render() {
-
-        var rowImages = [
-                'images/Road.PNG',   // Row 1 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG',    // Row 2 of 2 of grass
-                'images/Road.PNG'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
-            row, col;
-
-
-        // for (row = 0; row < numRows; row++) {
-            // for (col = 0; col < numCols; col++) {
-
-                ctx.drawImage(gtResources.get(rowImages[0]),  101,  0);
-            // }
-        // }
-
-
+    function render() {
+        ctx.drawImage(gtResources.get(rowImages[0]),  0,  0);
         renderEntities();
     }
 
 
     function renderEntities() {
-
-         enemies.forEach(function(enemy) {
-            //alert(enemy);
-             enemy.render(ctx);
+         angular.forEach(allEnemies,function(enemy) {   
+            enemy.render(ctx);
          });
-         obstacle.render(ctx);
+         // obstacle.render(ctx);
          player.render(ctx);
     }
 
 
     function reset() {
-        // noop
+      failed = false;
     }
 
     var checkCollide = function(){
-    //console.log(enemies[0].y +"("+player.y+")");
-    // var flag=false;
-     enemies.forEach(function(enemy){
-       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90) || (Math.abs(player.x-obstacle.x) <=10) && (Math.abs(player.y-obstacle.y) <=30)){
-           // sound1.src = "sound/car_crash.wav";
-            player.sprite = 'images/blood.png';
-            //sound1.play();
-            setTimeout(function(){player.reset();},500);
-            //player.reset();
-            //player.score = (player.score<=10) ? 0 : player.score-10;
-           // checkLevel();
-           // flag = true
-           gameOver();
+     angular.forEach(allEnemies,function(enemy){
+       if((Math.abs(player.x-enemy.x) <=30) && (Math.abs(player.y-enemy.y) <=90  && (touched === false)) ){
+            sound1.src = "assets/sound/car_crash.wav";
+            sound1.play();
+            touched = true;
+            player.sprite = 'assets/images/blood.png';
+            failed = true;
+            gameOver();
         }
       });
+     touched = false;
      }
+<<<<<<< HEAD
     function gameOver(){
       failed = true;
       doc.querySelector(".lives").innerHTML = "GAME OVER";
@@ -153,33 +160,39 @@ app.directive("drawGame", ['gtResources','enemies','player','obstacle', function
          doc.querySelector(".h_score").innerHTML = player.highScore;
         doc.querySelector(".c_score").innerHTML = player.score;
         doc.querySelector(".life").innerHTML = player.level;
+=======
+     $scope.board = function(){
+        $scope.score = player.score;
+        $scope.highScore = player.highScore;
+        $scope.level = player.level;
+        $scope.$apply();
+>>>>>>> master
      }
+     // console.log($scope.score);
     gtResources.load([
-        'images/char-boy.png',
-        'images/Rock.png',
-        'images/sky.png',
-        'images/Road.PNG',
-        'images/car2.png',
-        'images/car5.png',
-        'images/car6.png',
-        'images/car7.png',
-        'images/boy-up1.png',
-        'images/boy-up2.png',
-        'images/boy-up3.png',
-        'images/boy-up.png',
-        'images/boy-down.png',
-        'images/boy-down1.png',
-        'images/boy-down2.png',
-        'images/boy-left.png',
-        'images/boy-right.png',
-        'images/blood.png',
-        'images/Star.png',
-        'images/stone-small.png',
+        'assets/images/char-boy.png',
+        'assets/images/Rock.png',
+        'assets/images/sky.png',
+        'assets/images/Road.PNG',
+        'assets/images/car2.png',
+        'assets/images/car5.png',
+        'assets/images/car6.png',
+        'assets/images/car7.png',
+        'assets/images/boy-up1.png',
+        'assets/images/boy-up2.png',
+        'assets/images/boy-up3.png',
+        'assets/images/boy-up.png',
+        'assets/images/boy-down.png',
+        'assets/images/boy-down1.png',
+        'assets/images/boy-down2.png',
+        'assets/images/boy-left.png',
+        'assets/images/boy-right.png',
+        'assets/images/blood.png',
+        'assets/images/stone-small.png',
     ]);
     gtResources.onReady(init);
 
     $scope.ctx = ctx;
-     
     }
   }
 }]);
